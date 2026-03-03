@@ -1,38 +1,15 @@
-## Node.js CRM Backend
+Run in order:
 
-### 1) Install
+1. `001_operators_roles_assignments.sql`
+2. `002_seed_default_operator.sql`
+3. `003_full_crm_schema.sql`
+4. `004_seed_crm_defaults.sql`
+
+Example (Postgres):
+
 ```bash
-cd backend
-npm install
+psql "$DATABASE_URL" -f db/migrations/001_operators_roles_assignments.sql
+psql "$DATABASE_URL" -f db/migrations/002_seed_default_operator.sql
+psql "$DATABASE_URL" -f db/migrations/003_full_crm_schema.sql
+psql "$DATABASE_URL" -f db/migrations/004_seed_crm_defaults.sql
 ```
-
-### 2) Configure env
-```bash
-cp .env.example .env
-# edit DATABASE_URL
-```
-
-### 3) Run
-```bash
-npm run dev
-```
-
-Server starts at `http://localhost:3000` and will:
-- run SQL migrations from `../db/migrations`
-- serve CRM UI at `/`
-- expose API at `/api/*`
-
-## API docs
-- Human docs: `backend/API.md`
-- OpenAPI spec: `backend/openapi.yaml`
-
-### Key API endpoints
-- `GET /api/health`
-- `GET /api/operators`
-- `POST /api/operators`
-- `GET /api/leads`
-- `POST /api/leads`
-- `PATCH /api/leads/:id`
-- `GET /api/tasks`
-- `POST /api/tasks`
-- `PATCH /api/tasks/:id`

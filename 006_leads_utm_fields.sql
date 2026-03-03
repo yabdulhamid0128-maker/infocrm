@@ -1,0 +1,8 @@
+BEGIN;
+
+ALTER TABLE leads
+  ADD COLUMN IF NOT EXISTS utm_medium TEXT,
+  ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
+  ADD COLUMN IF NOT EXISTS utm_content TEXT;
+
+COMMIT;
