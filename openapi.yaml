@@ -1,0 +1,216 @@
+openapi: 3.0.3
+info:
+  title: CRM Backend API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+  /api/operators:
+    get:
+      summary: List operators
+      responses:
+        "200":
+          description: Operator list
+    post:
+      summary: Create or upsert operator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        "201":
+          description: Created
+  /api/leads:
+    get:
+      summary: List leads
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer }
+        - in: query
+          name: offset
+          schema: { type: integer }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: stage
+          schema: { type: string }
+        - in: query
+          name: operator_id
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Lead list
+    post:
+      summary: Create lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string }
+                phone: { type: string }
+                telegram: { type: string }
+                social: { type: string }
+                source: { type: string }
+                campaign: { type: string }
+                stage: { type: string }
+                score: { type: integer }
+                potential_revenue: { type: number }
+                revenue: { type: number }
+                revenue_status: { type: string }
+                call_booked: { type: boolean }
+                follow_up_at: { type: string, format: date-time, nullable: true }
+                notes: { type: string }
+                operator_id: { type: integer, nullable: true }
+      responses:
+        "201":
+          description: Created
+  /api/leads/{id}:
+    patch:
+      summary: Update lead
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete lead
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Deleted
+  /api/tasks:
+    get:
+      summary: List tasks
+      parameters:
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200":
+          description: Task list
+    post:
+      summary: Create task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                lead_id: { type: integer, nullable: true }
+                title: { type: string }
+                notes: { type: string }
+                due_at: { type: string, format: date-time, nullable: true }
+                priority: { type: string }
+                status: { type: string }
+                assignee_id: { type: integer, nullable: true }
+                created_by: { type: integer, nullable: true }
+      responses:
+        "201":
+          description: Created
+  /api/tasks/{id}:
+    patch:
+      summary: Update task
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete task
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Deleted
+  /api/leads/import:
+    post:
+      summary: Import legacy leads
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leads:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        "200":
+          description: Imported
+  /api/pipeline/stages:
+    get:
+      summary: Get pipeline stages
+      responses:
+        "200":
+          description: Stage list
+    put:
+      summary: Save pipeline stages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code: { type: string }
+                      name: { type: string }
+                      color: { type: string }
+                      background: { type: string }
+                      sort_order: { type: integer }
+      responses:
+        "200":
+          description: Saved
